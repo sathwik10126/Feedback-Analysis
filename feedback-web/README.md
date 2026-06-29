@@ -9,7 +9,7 @@ A full-stack web application with a **Flask (Python) backend** and a pure **HTML
 | Layer     | Technology                          |
 |-----------|-------------------------------------|
 | Backend   | Python · Flask · SQLite             |
-| Frontend  | HTML5 · CSS3 · Vanilla JavaScript   |
+| Frontend  | HTML5 · CSS3 · JavaScript   |
 | NLP/ML    | scikit-learn (TF-IDF + Logistic Regression) |
 | Charts    | Chart.js (CDN)                      |
 
