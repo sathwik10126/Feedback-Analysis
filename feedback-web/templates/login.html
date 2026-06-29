@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>University Feedback System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+</head>
+<body class="login-page">
+
+  <!-- Animated background orbs -->
+  <div class="bg-orb orb1"></div>
+  <div class="bg-orb orb2"></div>
+  <div class="bg-orb orb3"></div>
+
+  <div class="login-container">
+    <!-- Left panel -->
+    <div class="login-left">
+      <div class="brand">
+        <div class="brand-icon">🎓</div>
+        <h1 class="brand-title">University<br/>Feedback<br/>System</h1>
+        <p class="brand-sub">NLP-powered insights for better education</p>
+      </div>
+      <div class="stats-row">
+        <div class="stat"><span class="stat-num">3</span><span class="stat-lbl">Roles</span></div>
+        <div class="stat"><span class="stat-num">AI</span><span class="stat-lbl">Sentiment</span></div>
+        <div class="stat"><span class="stat-num">∞</span><span class="stat-lbl">Insights</span></div>
+      </div>
+    </div>
+
+    <!-- Right panel: login form -->
+    <div class="login-right">
+      <h2 class="form-title">Sign In</h2>
+      <p class="form-sub">Select your role to continue</p>
+
+      <!-- Role tabs -->
+      <div class="role-tabs">
+        <button class="role-tab active" data-role="student">🎓 Student</button>
+        <button class="role-tab" data-role="teacher">👨‍🏫 Teacher</button>
+        <button class="role-tab" data-role="admin">🛠 Admin</button>
+      </div>
+
+      <form id="loginForm" autocomplete="off">
+        <div class="field-group">
+          <label>Username</label>
+          <input type="text" id="username" placeholder="Enter your username" required />
+        </div>
+        <div class="field-group">
+          <label>Password</label>
+          <input type="password" id="password" placeholder="Enter your password" required />
+          <button type="button" class="pwd-toggle" onclick="togglePwd()">👁</button>
+        </div>
+
+        <div id="loginError" class="error-msg hidden"></div>
+
+        <button type="submit" class="btn-primary" id="loginBtn">
+          <span>Sign In</span>
+          <div class="spinner hidden" id="loginSpinner"></div>
+        </button>
+      </form>
+
+      <p class="hint-text">Default password for all accounts: <code>123</code></p>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+</body>
+</html>

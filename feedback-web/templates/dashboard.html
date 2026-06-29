@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dashboard — University Feedback System</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+</head>
+<body class="dashboard-page" data-role="{{ role }}">
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+      <span class="sb-icon">🎓</span>
+      <span class="sb-name">UniFeeback</span>
+    </div>
+
+    <div class="sidebar-user">
+      <div class="user-avatar">{{ user[0]|upper }}</div>
+      <div>
+        <div class="user-name">{{ user }}</div>
+        <div class="user-role">{{ role|capitalize }}</div>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      {% if role == "student" %}
+        <a class="nav-item active" data-view="courses" onclick="showView('courses')">📚 Courses</a>
+        <a class="nav-item" data-view="my-feedback" onclick="showView('my-feedback')">📝 My Submissions</a>
+      {% elif role == "teacher" %}
+        <a class="nav-item active" data-view="overview" onclick="showView('overview')">📊 Overview</a>
+        <a class="nav-item" data-view="feedback-list" onclick="showView('feedback-list')">💬 Feedback</a>
+      {% elif role == "admin" %}
+        <a class="nav-item active" data-view="analytics" onclick="showView('analytics')">📊 Analytics</a>
+        <a class="nav-item" data-view="all-feedback" onclick="showView('all-feedback')">📋 All Feedback</a>
+      {% endif %}
+    </nav>
+
+    <button class="btn-logout" onclick="logout()">🚪 Logout</button>
+  </aside>
+
+  <!-- Main -->
+  <main class="main-content" id="mainContent">
+
+    <!-- Top bar -->
+    <header class="topbar">
+      <button class="hamburger" onclick="toggleSidebar()">☰</button>
+      <h2 class="topbar-title" id="topbarTitle">Dashboard</h2>
+      <div class="topbar-right">
+        <span class="badge badge-{{ role }}">{{ role|capitalize }}</span>
+      </div>
+    </header>
+
+    <!-- ───────── STUDENT VIEWS ───────── -->
+    {% if role == "student" %}
+
+    <div class="view active" id="view-courses">
+      <div class="page-header">
+        <h1>📚 Available Courses</h1>
+        <p>Select a course to submit your feedback</p>
+      </div>
+      <div class="courses-grid" id="coursesGrid">
+        <!-- Populated by JS -->
+      </div>
+    </div>
+
+    <div class="view" id="view-my-feedback">
+      <div class="page-header">
+        <h1>📝 My Submissions</h1>
+        <p>Your submitted feedback history</p>
+      </div>
+      <div id="myFeedbackList" class="feedback-list"></div>
+    </div>
+
+    <!-- Feedback Modal -->
+    <div class="modal-overlay hidden" id="feedbackModal">
+      <div class="modal">
+        <button class="modal-close" onclick="closeModal()">✕</button>
+        <h2 class="modal-title" id="modalTitle">Submit Feedback</h2>
+        <p class="modal-sub" id="modalSub"></p>
+
+        <div class="field-group">
+          <label>Your Feedback</label>
+          <textarea id="fbText" rows="5" placeholder="Share your honest thoughts about this faculty member..."></textarea>
+        </div>
+
+        <div class="field-group">
+          <label>Rating: <span id="ratingVal">3</span>/5</label>
+          <div class="star-row" id="starRow">
+            <span class="star" data-val="1">★</span>
+            <span class="star" data-val="2">★</span>
+            <span class="star" data-val="3">★</span>
+            <span class="star" data-val="4">★</span>
+            <span class="star" data-val="5">★</span>
+          </div>
+        </div>
+
+        <div id="fbError" class="error-msg hidden"></div>
+
+        <button class="btn-primary" onclick="submitFeedback()">
+          <span>Submit Feedback</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Success overlay -->
+    <div class="success-overlay hidden" id="successOverlay">
+      <div class="success-card">
+        <div class="success-icon" id="successIcon">✅</div>
+        <h2 id="successTitle">Feedback Submitted!</h2>
+        <p id="successMsg"></p>
+        <button class="btn-primary" onclick="closeSuccess()">Done</button>
+      </div>
+    </div>
+
+    {% endif %}
+
+    <!-- ───────── TEACHER VIEWS ───────── -->
+    {% if role == "teacher" %}
+
+    <div class="view active" id="view-overview">
+      <div class="page-header">
+        <h1>📊 Your Dashboard</h1>
+        <p>Performance overview from student feedback</p>
+      </div>
+      <div class="metrics-row" id="teacherMetrics"></div>
+      <div class="charts-row">
+        <div class="chart-card">
+          <h3>⭐ Rating Distribution</h3>
+          <canvas id="ratingChart"></canvas>
+        </div>
+        <div class="chart-card">
+          <h3>😊 Sentiment Breakdown</h3>
+          <canvas id="sentimentChart"></canvas>
+        </div>
+      </div>
+    </div>
+
+    <div class="view" id="view-feedback-list">
+      <div class="page-header">
+        <h1>💬 Student Feedback</h1>
+        <p>All feedback received from students</p>
+      </div>
+      <div id="teacherFeedbackList" class="feedback-list"></div>
+    </div>
+
+    {% endif %}
+
+    <!-- ───────── ADMIN VIEWS ───────── -->
+    {% if role == "admin" %}
+
+    <div class="view active" id="view-analytics">
+      <div class="page-header">
+        <h1>📊 Analytics Dashboard</h1>
+        <p>System-wide feedback insights</p>
+      </div>
+      <div class="metrics-row" id="adminMetrics"></div>
+      <div class="charts-row">
+        <div class="chart-card">
+          <h3>😊 Sentiment Distribution</h3>
+          <canvas id="sentimentChart"></canvas>
+        </div>
+        <div class="chart-card">
+          <h3>⭐ Rating Distribution</h3>
+          <canvas id="ratingChart"></canvas>
+        </div>
+      </div>
+      <div class="chart-card full-width">
+        <h3>👨‍🏫 Faculty Average Rating</h3>
+        <canvas id="facultyChart"></canvas>
+      </div>
+    </div>
+
+    <div class="view" id="view-all-feedback">
+      <div class="page-header">
+        <h1>📋 All Feedback</h1>
+        <div class="page-actions">
+          <input type="text" id="searchInput" placeholder="🔍 Search feedback..." oninput="filterTable()" />
+          <button class="btn-secondary" onclick="downloadCSV()">⬇ Export CSV</button>
+        </div>
+      </div>
+      <div class="table-wrapper">
+        <table class="data-table" id="feedbackTable">
+          <thead>
+            <tr>
+              <th>Student</th><th>Faculty</th><th>Course</th>
+              <th>Feedback</th><th>Sentiment</th><th>Rating</th><th>Date</th>
+            </tr>
+          </thead>
+          <tbody id="feedbackTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    {% endif %}
+
+  </main>
+
+  <script>
+    const ROLE = "{{ role }}";
+    const USER = "{{ user }}";
+  </script>
+  <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
+</body>
+</html>
