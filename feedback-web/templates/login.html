@@ -10,7 +10,6 @@
 </head>
 <body class="login-page">
 
-  <!-- Animated background orbs -->
   <div class="bg-orb orb1"></div>
   <div class="bg-orb orb2"></div>
   <div class="bg-orb orb3"></div>
@@ -21,37 +20,39 @@
       <div class="brand">
         <div class="brand-icon">🎓</div>
         <h1 class="brand-title">University<br/>Feedback<br/>System</h1>
-        <p class="brand-sub">NLP-powered insights for better education</p>
+        <p class="brand-sub">Secure access via official college email · NLP-powered sentiment insights</p>
       </div>
+
+      <div class="domain-notice">
+        <span class="domain-icon">🔒</span>
+        <div>
+          <div class="domain-notice-title">College Email Required</div>
+          <div class="domain-notice-sub">Only <strong>@college.edu</strong> accounts can access this system</div>
+        </div>
+      </div>
+
       <div class="stats-row">
         <div class="stat"><span class="stat-num">3</span><span class="stat-lbl">Roles</span></div>
         <div class="stat"><span class="stat-num">AI</span><span class="stat-lbl">Sentiment</span></div>
-        <div class="stat"><span class="stat-num">∞</span><span class="stat-lbl">Insights</span></div>
+        <div class="stat"><span class="stat-num">🔐</span><span class="stat-lbl">Verified</span></div>
       </div>
     </div>
 
-    <!-- Right panel: login form -->
+    <!-- Right panel -->
     <div class="login-right">
       <div class="auth-switch">
         <button class="switch-tab active" id="tabLogin" onclick="switchAuthMode('login')">Sign In</button>
-        <button class="switch-tab" id="tabSignup" onclick="switchAuthMode('signup')">Create Account</button>
+        <button class="switch-tab" id="tabSignup" onclick="switchAuthMode('signup')">Register</button>
       </div>
 
       <h2 class="form-title" id="formTitle">Sign In</h2>
-      <p class="form-sub" id="formSub">Select your role to continue</p>
-
-      <!-- Role tabs -->
-      <div class="role-tabs">
-        <button class="role-tab active" data-role="student">🎓 Student</button>
-        <button class="role-tab" data-role="teacher">👨‍🏫 Teacher</button>
-        <button class="role-tab" data-role="admin">🛠 Admin</button>
-      </div>
+      <p class="form-sub" id="formSub">Use your official college email to continue</p>
 
       <!-- LOGIN FORM -->
       <form id="loginForm" autocomplete="off">
         <div class="field-group">
-          <label>Username</label>
-          <input type="text" id="username" placeholder="Enter your username" required />
+          <label>College Email</label>
+          <input type="email" id="email" placeholder="e.g. 21CS045@college.edu" required />
         </div>
         <div class="field-group">
           <label>Password</label>
@@ -70,12 +71,17 @@
       <!-- SIGNUP FORM -->
       <form id="signupForm" class="hidden" autocomplete="off">
         <div class="field-group">
-          <label>Choose a Username</label>
-          <input type="text" id="suUsername" placeholder="e.g. john_doe" required />
+          <label>Full Name</label>
+          <input type="text" id="suName" placeholder="As per college records" required />
         </div>
         <div class="field-group">
-          <label>Create a Password</label>
-          <input type="password" id="suPassword" placeholder="At least 3 characters" required />
+          <label>College Email</label>
+          <input type="email" id="suEmail" placeholder="rollno@college.edu or name@college.edu" required />
+          <p class="field-hint" id="roleHint">Your role is detected automatically from your email format</p>
+        </div>
+        <div class="field-group">
+          <label>Create Password</label>
+          <input type="password" id="suPassword" placeholder="At least 6 characters" required />
           <button type="button" class="pwd-toggle" onclick="togglePwd('suPassword')">👁</button>
         </div>
         <div class="field-group">
@@ -91,7 +97,12 @@
         </button>
       </form>
 
-      <p class="hint-text" id="hintText">Default password for all accounts: <code>123</code></p>
+      <div class="email-format-guide" id="formatGuide">
+        <p class="guide-title">📋 Email Format Guide</p>
+        <div class="guide-row"><span class="guide-tag tag-student">Student</span><code>rollno@college.edu</code><span class="guide-eg">21CS045@college.edu</span></div>
+        <div class="guide-row"><span class="guide-tag tag-faculty">Faculty</span><code>firstlast@college.edu</code><span class="guide-eg">johnpaul@college.edu</span></div>
+        <div class="guide-row"><span class="guide-tag tag-admin">Admin</span><span class="guide-eg-only">Granted by an existing administrator — cannot self-register</span></div>
+      </div>
     </div>
   </div>
 

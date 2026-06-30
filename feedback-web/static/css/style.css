@@ -91,6 +91,17 @@ input, textarea, select { font-family: inherit; }
 .stat-num { display: block; font-size: 1.8rem; font-weight: 700; color: var(--gold); }
 .stat-lbl { font-size: 0.75rem; color: var(--blue-200); text-transform: uppercase; letter-spacing: 0.08em; }
 
+/* Domain notice */
+.domain-notice {
+  display: flex; align-items: flex-start; gap: 12px;
+  margin-top: 32px; padding: 16px; border-radius: 10px;
+  background: rgba(240,165,0,0.12); border: 1px solid rgba(240,165,0,0.3);
+}
+.domain-icon { font-size: 1.3rem; margin-top: 2px; }
+.domain-notice-title { font-weight: 600; color: var(--gold-light); font-size: 0.88rem; margin-bottom: 2px; }
+.domain-notice-sub { font-size: 0.8rem; color: var(--blue-200); line-height: 1.4; }
+.domain-notice-sub strong { color: var(--white); }
+
 /* Right panel */
 .login-right { width: 58%; padding: 56px 48px; background: var(--white); }
 .form-title { font-family: var(--font-display); font-size: 2rem; color: var(--blue-900); margin-bottom: 6px; }
@@ -107,7 +118,7 @@ input, textarea, select { font-family: inherit; }
 }
 .switch-tab.active { background: var(--white); color: var(--blue-600); box-shadow: 0 2px 8px rgba(15,27,61,0.08); }
 
-/* Role tabs */
+/* Role tabs (legacy — no longer used, harmless to keep) */
 .role-tabs { display: flex; gap: 8px; margin-bottom: 28px; }
 .role-tab {
   flex: 1; padding: 10px 4px; border-radius: 8px; border: 2px solid var(--gray-200);
@@ -163,6 +174,30 @@ input, textarea, select { font-family: inherit; }
 /* Hint */
 .hint-text { margin-top: 20px; font-size: 0.8rem; color: var(--gray-400); text-align: center; }
 .hint-text code { background: var(--gray-100); padding: 1px 6px; border-radius: 4px; font-family: monospace; color: var(--blue-600); }
+
+.field-hint { font-size: 0.76rem; color: var(--gray-400); margin-top: 6px; line-height: 1.4; }
+
+/* Email format guide (signup) */
+.email-format-guide {
+  margin-top: 24px; padding: 16px 18px; border-radius: 10px;
+  background: var(--blue-50); border: 1px solid var(--blue-200);
+}
+.guide-title { font-size: 0.8rem; font-weight: 700; color: var(--blue-600); margin-bottom: 10px; }
+.guide-row {
+  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+  font-size: 0.78rem; color: var(--gray-600); padding: 6px 0;
+  border-top: 1px dashed var(--blue-200);
+}
+.guide-row:first-of-type { border-top: none; padding-top: 0; }
+.guide-row code { background: var(--white); padding: 2px 8px; border-radius: 4px; font-family: monospace; color: var(--blue-600); border: 1px solid var(--blue-200); }
+.guide-eg, .guide-eg-only { color: var(--gray-400); font-size: 0.75rem; }
+.guide-tag {
+  padding: 2px 10px; border-radius: 20px; font-size: 0.7rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 0.03em; min-width: 56px; text-align: center;
+}
+.tag-student { background: #dbeafe; color: #1d4ed8; }
+.tag-faculty { background: #dcfce7; color: #15803d; }
+.tag-admin   { background: #fef3c7; color: #b45309; }
 
 /* Spinner */
 .spinner {
@@ -243,7 +278,7 @@ input, textarea, select { font-family: inherit; }
   padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; text-transform: capitalize;
 }
 .badge-student { background: #dbeafe; color: #1d4ed8; }
-.badge-teacher { background: #dcfce7; color: #15803d; }
+.badge-faculty { background: #dcfce7; color: #15803d; }
 .badge-admin   { background: #fef3c7; color: #b45309; }
 
 /* Views */

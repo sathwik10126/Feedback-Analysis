@@ -163,10 +163,10 @@ function closeSuccess() {
 }
 
 // ════════════════════════════════════════════════════════════════
-// TEACHER
+// FACULTY
 // ════════════════════════════════════════════════════════════════
 async function loadTeacherData() {
-  if (ROLE !== "teacher") return;
+  if (ROLE !== "faculty") return;
   const data = await api("/api/teacher/feedback");
 
   // Metrics
@@ -351,6 +351,6 @@ function emptyState(msg) {
 // ── Init ──────────────────────────────────────────────────────────
 document.addEventListener("DOMContentLoaded", () => {
   if (ROLE === "student")  loadCourses();
-  if (ROLE === "teacher")  loadTeacherData();
+  if (ROLE === "faculty")  loadTeacherData();
   if (ROLE === "admin")    loadAdminData();
 });

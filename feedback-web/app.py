@@ -1,21 +1,35 @@
+"""
+University Feedback System — Flask Backend
+============================================
+Authentication policy:
+  - Every account MUST use an official college email (@college.edu).
+  - Role is derived automatically from the email's local-part:
+        Student  -> roll-number format   (e.g. 21CS045@college.edu)
+        Faculty  -> name-only format     (e.g. johnpaul@college.edu)
+  - Admin access is NEVER self-assigned at signup. An existing admin must
+    explicitly promote a faculty/student account via the Admin Panel.
+"""
+
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for
 from functools import wraps
 import sqlite3, pickle, os, hashlib
 
+from auth_utils import validate_and_detect_role, EmailValidationError, is_valid_college_domain
+
 app = Flask(__name__)
-app.secret_key = "university_feedback_secret_2024"
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", "university_feedback_secret_2024")
 
-# ── Paths ──────────────────────────────────────────────────────────────────────
-BASE      = os.path.dirname(os.path.abspath(__file__))
-DB_PATH   = os.path.join(BASE, "data", "feedback.db")
-MDL_PATH  = os.path.join(BASE, "model", "model.pkl")
-VEC_PATH  = os.path.join(BASE, "model", "vectorizer.pkl")
+# ── Paths ────────────────────────────────────────────────────────────────────
+BASE     = os.path.dirname(os.path.abspath(__file__))
+DB_PATH  = os.path.join(BASE, "data", "feedback.db")
+MDL_PATH = os.path.join(BASE, "model", "model.pkl")
+VEC_PATH = os.path.join(BASE, "model", "vectorizer.pkl")
 
-# ── Load NLP model ─────────────────────────────────────────────────────────────
+# ── Load NLP model ───────────────────────────────────────────────────────────
 with open(MDL_PATH, "rb") as f:  model      = pickle.load(f)
 with open(VEC_PATH, "rb") as f:  vectorizer = pickle.load(f)
 
-# ── DB helpers ─────────────────────────────────────────────────────────────────
+# ── DB helpers ───────────────────────────────────────────────────────────────
 def get_db():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
@@ -25,10 +39,12 @@ def init_db():
     with get_db() as db:
         db.executescript("""
             CREATE TABLE IF NOT EXISTS users (
-                id       INTEGER PRIMARY KEY AUTOINCREMENT,
-                username TEXT UNIQUE NOT NULL,
-                password TEXT NOT NULL,
-                role     TEXT NOT NULL
+                id            INTEGER PRIMARY KEY AUTOINCREMENT,
+                email         TEXT UNIQUE NOT NULL,
+                display_name  TEXT NOT NULL,
+                password      TEXT NOT NULL,
+                role          TEXT NOT NULL CHECK(role IN ('student','faculty','admin')),
+                created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
             CREATE TABLE IF NOT EXISTS feedback (
                 id         INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -41,17 +57,28 @@ def init_db():
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             );
         """)
-        # Seed users (password = sha256 of "123")
-        pw = hashlib.sha256(b"123").hexdigest()
-        users = [
-            ("student1", pw, "student"), ("student2", pw, "student"), ("student3", pw, "student"),
-            ("VENKATARAMANA V", pw, "teacher"), ("SHENDE AMIT", pw, "teacher"), ("PRAVEEN", pw, "teacher"),
-            ("admin", pw, "admin"),
+        # Seed one bootstrap admin account so the system is usable on first run.
+        # Password = "Admin@123" — MUST be changed immediately in production.
+        pw = hashlib.sha256(b"Admin@123").hexdigest()
+        db.execute(
+            "INSERT OR IGNORE INTO users (email, display_name, password, role) VALUES (?,?,?,?)",
+            ("admin@college.edu", "System Administrator", pw, "admin")
+        )
+
+        # Seed faculty (matches the COURSES table below)
+        faculty_seed = [
+            ("venkataramanav@college.edu", "Venkataramana V"),
+            ("shendeamit@college.edu",     "Shende Amit"),
+            ("praveen@college.edu",        "Praveen"),
         ]
-        db.executemany("INSERT OR IGNORE INTO users (username,password,role) VALUES (?,?,?)", users)
+        for email, name in faculty_seed:
+            db.execute(
+                "INSERT OR IGNORE INTO users (email, display_name, password, role) VALUES (?,?,?,?)",
+                (email, name, pw, "faculty")
+            )
         db.commit()
 
-# ── Sentiment ──────────────────────────────────────────────────────────────────
+# ── Sentiment (NLP) ──────────────────────────────────────────────────────────
 def predict_sentiment(text):
     if not text.strip():
         return "Neutral"
@@ -59,7 +86,7 @@ def predict_sentiment(text):
     pred = model.predict(vec)[0]
     return {1: "Positive", 0: "Negative", 2: "Neutral"}.get(pred, "Neutral")
 
-# ── Auth decorator ─────────────────────────────────────────────────────────────
+# ── Auth decorator ───────────────────────────────────────────────────────────
 def login_required(role=None):
     def decorator(f):
         @wraps(f)
@@ -72,7 +99,7 @@ def login_required(role=None):
         return wrapped
     return decorator
 
-# ── Page routes ────────────────────────────────────────────────────────────────
+# ── Page routes ──────────────────────────────────────────────────────────────
 @app.route("/")
 def index():
     if "user" in session:
@@ -83,71 +110,114 @@ def index():
 def dashboard():
     if "user" not in session:
         return redirect(url_for("index"))
-    return render_template("dashboard.html", role=session["role"], user=session["user"])
+    return render_template(
+        "dashboard.html",
+        role=session["role"],
+        user=session["display_name"],
+        email=session["user"],
+    )
 
-# ── API: Auth ──────────────────────────────────────────────────────────────────
+# ── API: Auth ────────────────────────────────────────────────────────────────
 @app.route("/api/login", methods=["POST"])
 def api_login():
-    data = request.json
-    username = data.get("username", "").strip()
-    password  = data.get("password", "")
-    role      = data.get("role", "")
-    pw_hash   = hashlib.sha256(password.encode()).hexdigest()
+    data     = request.json or {}
+    email    = data.get("email", "").strip().lower()
+    password = data.get("password", "")
+
+    if not email or not password:
+        return jsonify({"success": False, "message": "Email and password are required."}), 400
+
+    pw_hash = hashlib.sha256(password.encode()).hexdigest()
 
     with get_db() as db:
         user = db.execute(
-            "SELECT * FROM users WHERE username=? AND password=? AND role=?",
-            (username, pw_hash, role)
+            "SELECT * FROM users WHERE email=? AND password=?",
+            (email, pw_hash)
         ).fetchone()
 
     if not user:
-        return jsonify({"success": False, "message": "Invalid credentials or wrong role."}), 401
+        return jsonify({"success": False, "message": "Invalid college email or password."}), 401
 
-    session["user"] = user["username"]
-    session["role"] = user["role"]
-    return jsonify({"success": True, "role": user["role"], "user": user["username"]})
+    session["user"]         = user["email"]
+    session["role"]         = user["role"]
+    session["display_name"] = user["display_name"]
+    return jsonify({"success": True, "role": user["role"], "user": user["display_name"]})
+
 
 @app.route("/api/logout", methods=["POST"])
 def api_logout():
     session.clear()
     return jsonify({"success": True})
 
+
 @app.route("/api/signup", methods=["POST"])
 def api_signup():
-    data     = request.json
-    username = data.get("username", "").strip()
-    password = data.get("password", "")
-    role     = data.get("role", "")
+    """
+    Self-service registration is restricted to students and faculty only.
+    Role is derived strictly from the official college email format —
+    the client never sends a role, and any role value submitted by the
+    client is ignored. Admin accounts cannot be created through signup.
+    """
+    data        = request.json or {}
+    email       = data.get("email", "").strip().lower()
+    password    = data.get("password", "")
+    display_name = data.get("name", "").strip()
 
-    if not username or not password:
-        return jsonify({"success": False, "message": "Username and password are required."}), 400
-    if len(password) < 3:
-        return jsonify({"success": False, "message": "Password must be at least 3 characters."}), 400
-    if role not in ("student", "teacher", "admin"):
-        return jsonify({"success": False, "message": "Invalid role selected."}), 400
+    if not email or not password or not display_name:
+        return jsonify({"success": False, "message": "Name, college email, and password are all required."}), 400
+
+    if len(password) < 6:
+        return jsonify({"success": False, "message": "Password must be at least 6 characters."}), 400
+
+    try:
+        role = validate_and_detect_role(email)
+    except EmailValidationError as e:
+        return jsonify({"success": False, "message": str(e)}), 400
 
     pw_hash = hashlib.sha256(password.encode()).hexdigest()
 
     with get_db() as db:
-        existing = db.execute("SELECT 1 FROM users WHERE username=?", (username,)).fetchone()
+        existing = db.execute("SELECT 1 FROM users WHERE email=?", (email,)).fetchone()
         if existing:
-            return jsonify({"success": False, "message": "Username already taken. Try logging in instead."}), 409
+            return jsonify({"success": False, "message": "An account with this college email already exists."}), 409
 
         db.execute(
-            "INSERT INTO users (username,password,role) VALUES (?,?,?)",
-            (username, pw_hash, role)
+            "INSERT INTO users (email, display_name, password, role) VALUES (?,?,?,?)",
+            (email, display_name, pw_hash, role)
         )
         db.commit()
 
-    session["user"] = username
-    session["role"] = role
-    return jsonify({"success": True, "role": role, "user": username})
+    session["user"]         = email
+    session["role"]         = role
+    session["display_name"] = display_name
+    return jsonify({"success": True, "role": role, "user": display_name})
 
-# ── API: Feedback ──────────────────────────────────────────────────────────────
+
+@app.route("/api/admin/promote", methods=["POST"])
+@login_required(role="admin")
+def api_admin_promote():
+    """Existing admin grants admin privileges to another college-domain account."""
+    data  = request.json or {}
+    email = data.get("email", "").strip().lower()
+
+    if not is_valid_college_domain(email):
+        return jsonify({"success": False, "message": "Target must be a valid @college.edu account."}), 400
+
+    with get_db() as db:
+        target = db.execute("SELECT * FROM users WHERE email=?", (email,)).fetchone()
+        if not target:
+            return jsonify({"success": False, "message": "No account found with that email."}), 404
+        db.execute("UPDATE users SET role='admin' WHERE email=?", (email,))
+        db.commit()
+
+    return jsonify({"success": True, "message": f"{email} has been granted admin access."})
+
+
+# ── API: Feedback ────────────────────────────────────────────────────────────
 COURSES = [
-    {"faculty": "VENKATARAMANA V", "course": "NLP"},
-    {"faculty": "SHENDE AMIT",     "course": "Smart Farming"},
-    {"faculty": "PRAVEEN",         "course": "Data Structures"},
+    {"faculty": "Venkataramana V", "course": "NLP"},
+    {"faculty": "Shende Amit",     "course": "Smart Farming"},
+    {"faculty": "Praveen",         "course": "Data Structures"},
 ]
 
 @app.route("/api/courses")
@@ -158,11 +228,11 @@ def api_courses():
 @app.route("/api/feedback", methods=["POST"])
 @login_required(role="student")
 def api_submit_feedback():
-    data      = request.json
-    faculty   = data.get("faculty", "")
-    course    = data.get("course", "")
-    text      = data.get("feedback", "").strip()
-    rating    = int(data.get("rating", 3))
+    data    = request.json or {}
+    faculty = data.get("faculty", "")
+    course  = data.get("course", "")
+    text    = data.get("feedback", "").strip()
+    rating  = int(data.get("rating", 3))
 
     if not text:
         return jsonify({"success": False, "message": "Feedback text is required."}), 400
@@ -172,7 +242,7 @@ def api_submit_feedback():
     with get_db() as db:
         db.execute(
             "INSERT INTO feedback (student,faculty,course,feedback,sentiment,rating) VALUES (?,?,?,?,?,?)",
-            (session["user"], faculty, course, text, sentiment, rating)
+            (session["display_name"], faculty, course, text, sentiment, rating)
         )
         db.commit()
 
@@ -180,12 +250,12 @@ def api_submit_feedback():
     return jsonify({"success": True, "sentiment": label_map.get(sentiment, sentiment)})
 
 @app.route("/api/teacher/feedback")
-@login_required(role="teacher")
+@login_required(role="faculty")
 def api_teacher_feedback():
     with get_db() as db:
         rows = db.execute(
             "SELECT * FROM feedback WHERE faculty=? ORDER BY created_at DESC",
-            (session["user"],)
+            (session["display_name"],)
         ).fetchall()
     return jsonify([dict(r) for r in rows])
 
@@ -200,11 +270,11 @@ def api_admin_feedback():
 @login_required(role="admin")
 def api_admin_stats():
     with get_db() as db:
-        total    = db.execute("SELECT COUNT(*) as c FROM feedback").fetchone()["c"]
-        avg_rat  = db.execute("SELECT ROUND(AVG(rating),2) as a FROM feedback").fetchone()["a"] or 0
-        sentiment= db.execute("SELECT sentiment, COUNT(*) as c FROM feedback GROUP BY sentiment").fetchall()
-        faculty  = db.execute("SELECT faculty, ROUND(AVG(rating),2) as avg FROM feedback GROUP BY faculty").fetchall()
-        ratings  = db.execute("SELECT rating, COUNT(*) as c FROM feedback GROUP BY rating").fetchall()
+        total     = db.execute("SELECT COUNT(*) as c FROM feedback").fetchone()["c"]
+        avg_rat   = db.execute("SELECT ROUND(AVG(rating),2) as a FROM feedback").fetchone()["a"] or 0
+        sentiment = db.execute("SELECT sentiment, COUNT(*) as c FROM feedback GROUP BY sentiment").fetchall()
+        faculty   = db.execute("SELECT faculty, ROUND(AVG(rating),2) as avg FROM feedback GROUP BY faculty").fetchall()
+        ratings   = db.execute("SELECT rating, COUNT(*) as c FROM feedback GROUP BY rating").fetchall()
     return jsonify({
         "total": total, "avg_rating": avg_rat,
         "sentiment": [dict(r) for r in sentiment],
