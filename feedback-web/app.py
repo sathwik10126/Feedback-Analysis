@@ -55,9 +55,9 @@ def init_db():
 def predict_sentiment(text):
     if not text.strip():
         return "Neutral"
-    vec  = vectorizer.transform([text])
+    vec  = vectorizer.transform([text.strip().lower()])
     pred = model.predict(vec)[0]
-    return {1: "Positive", 0: "Negative"}.get(pred, "Neutral")
+    return {1: "Positive", 0: "Negative", 2: "Neutral"}.get(pred, "Neutral")
 
 # ── Auth decorator ─────────────────────────────────────────────────────────────
 def login_required(role=None):
@@ -111,6 +111,37 @@ def api_login():
 def api_logout():
     session.clear()
     return jsonify({"success": True})
+
+@app.route("/api/signup", methods=["POST"])
+def api_signup():
+    data     = request.json
+    username = data.get("username", "").strip()
+    password = data.get("password", "")
+    role     = data.get("role", "")
+
+    if not username or not password:
+        return jsonify({"success": False, "message": "Username and password are required."}), 400
+    if len(password) < 3:
+        return jsonify({"success": False, "message": "Password must be at least 3 characters."}), 400
+    if role not in ("student", "teacher", "admin"):
+        return jsonify({"success": False, "message": "Invalid role selected."}), 400
+
+    pw_hash = hashlib.sha256(password.encode()).hexdigest()
+
+    with get_db() as db:
+        existing = db.execute("SELECT 1 FROM users WHERE username=?", (username,)).fetchone()
+        if existing:
+            return jsonify({"success": False, "message": "Username already taken. Try logging in instead."}), 409
+
+        db.execute(
+            "INSERT INTO users (username,password,role) VALUES (?,?,?)",
+            (username, pw_hash, role)
+        )
+        db.commit()
+
+    session["user"] = username
+    session["role"] = role
+    return jsonify({"success": True, "role": role, "user": username})
 
 # ── API: Feedback ──────────────────────────────────────────────────────────────
 COURSES = [

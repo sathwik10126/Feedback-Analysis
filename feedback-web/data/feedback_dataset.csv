@@ -18,104 +18,378 @@ text,label
 "Teacher has strong knowledge",1
 "Very engaging class",1
 "Practical examples were useful",1
-"Excellent communication",1
-"Good pace of teaching",1
-"Wonderful classroom experience",1
-"Faculty solved all doubts",1
-"Very effective teaching",1
-"Detailed explanation given",1
-"One of the best classes",1
-"Clear voice and explanation",1
-"Loved today's session",1
-"Interesting and useful lecture",1
-"Great faculty support",1
-"Examples made it easy",1
-"Brilliant teaching method",1
-"Highly understandable class",1
-"Very nice explanation",1
-"Teacher motivated students well",1
-"Fantastic lecture delivery",1
-"Excellent subject clarity",1
-"Very productive class",1
-"Class was easy to follow",1
-"Teacher explained every step",1
-"Bad teaching",0
-"Not understandable",0
-"Very confusing lecture",0
-"Poor explanation",0
-"Could not follow class",0
-"Faculty speaks too fast",0
-"No clarity in concepts",0
-"Very boring class",0
-"Examples were not useful",0
-"Difficult to understand",0
-"Poor classroom interaction",0
-"Teacher skipped important points",0
-"Very disappointing lecture",0
-"No proper explanation",0
-"Concepts remained unclear",0
-"Monotonous teaching style",0
-"Too much theory only",0
-"No doubt clarification",0
-"Class was not engaging",0
-"Teacher rushed the topic",0
-"Very bad experience",0
-"Unclear voice and explanation",0
-"Session lacked structure",0
-"Could not grasp concepts",0
-"Poor communication skills",0
-"Class was messy",0
-"No real examples given",0
-"Hard to stay focused",0
-"Teacher not interactive",0
-"Lecture was ineffective",0
-"Bad pace of teaching",0
-"Too many doubts left",0
-"Not satisfied with class",0
-"Very weak explanation",0
-"Poorly managed lecture",0
-"Topic was left incomplete",0
-"Teaching method was ineffective",0
-"Unorganized class",0
-"Class felt too difficult",0
-"Worst teaching experience",0
-"Average class",2
-"Okay teaching",2
-"Lecture was fine",2
-"Normal classroom session",2
-"Teaching was acceptable",2
-"Concepts were somewhat clear",2
-"It was an ordinary class",2
-"Neither good nor bad",2
-"Session was manageable",2
-"Average explanation",2
-"Faculty was okay",2
-"Class was decent",2
-"Moderate teaching quality",2
-"Some parts were clear",2
-"Can be improved",2
-"Teaching style is normal",2
-"Examples were average",2
-"Class was satisfactory",2
-"Topic was partly understandable",2
-"Nothing special in class",2
-"Usual teaching session",2
-"Fair explanation",2
-"It was okay overall",2
-"Neutral experience",2
-"Session was average",2
-"Teaching is fine",2
-"Explanation was decent",2
-"Not bad, not great",2
-"Class went normally",2
-"Average faculty interaction",2
-"Topic was manageable",2
-"Lecture quality is medium",2
-"Can understand with self study",2
-"Some doubts remained",2
-"Session was balanced",2
-"Acceptable lecture",2
-"Moderately useful class",2
-"Just an average experience",2
-"Fine but needs improvement",2
-"Teaching was standard",2
+"Faculty is very patient",1
+"Great teacher overall",1
+"Loved every lecture",1
+"Faculty clears doubts quickly",1
+"Very knowledgeable professor",1
+"Best faculty in department",1
+"Enthusiastic and energetic teacher",1
+"Made complex topics simple",1
+"Always available for students",1
+"Real world examples made it easy",1
+"Encourages student participation",1
+"Excellent command over subject",1
+"The professor is truly inspiring",1
+"Clear and concise delivery",1
+"Faculty uses good teaching aids",1
+"Every class was worth attending",1
+"Wonderful learning experience",1
+"Highly recommended faculty",1
+"Best lecture I have ever attended",1
+"Professor explains step by step",1
+"Teaching is very systematic",1
+"Great at explaining difficult concepts",1
+"I look forward to every class",1
+"Teaching style is very effective",1
+"Faculty connects theory to practice",1
+"Excellent communication skills",1
+"Very motivating faculty",1
+"Brings energy to every session",1
+"I finally understood this topic",1
+"Makes learning fun",1
+"Detailed and thorough explanation",1
+"Very approachable and helpful",1
+"Faculty gives excellent notes",1
+"Great use of whiteboard",1
+"Always on time and prepared",1
+"Class participation is encouraged",1
+"Difficult concepts explained simply",1
+"Very good rapport with students",1
+"Faculty gives real examples from industry",1
+"Assignments are practical and useful",1
+"Teaching pace is just right",1
+"Good at answering student questions",1
+"Wonderful professor learned a lot",1
+"Subject was made very interesting",1
+"Faculty always responds to queries",1
+"Great depth of knowledge",1
+"Best semester because of this faculty",1
+"Superb quality of teaching",1
+"This professor is the reason I love this subject",1
+"Well organized slides and material",1
+"Teaching is passionate and clear",1
+"Faculty creates a positive classroom environment",1
+"Interactive and thought provoking classes",1
+"Teacher provides constructive feedback",1
+"Excellent mentor and guide",1
+"I improved a lot this semester",1
+"Great examples and case studies",1
+"Professor listens to student concerns",1
+"Smart Farming explained brilliantly",1
+"Data Structures was made very easy",1
+"I never missed a class",1
+"One of the best teachers I have had",1
+"Very dedicated professor",1
+"Student friendly teaching approach",1
+"Clears all doubts within the class",1
+"Best possible teaching",1
+"Great blend of theory and practice",1
+"Amazing lecture delivery",1
+"Faculty demonstrates strong domain expertise",1
+"Notes provided are comprehensive",1
+"Assignments help reinforce learning",1
+"Professor is always well prepared",1
+"Teaching is logical and structured",1
+"Excellent analytical thinking encouraged",1
+"I would recommend this faculty to everyone",1
+"Faculty makes difficult problems solvable",1
+"Very clear voice and presentation",1
+"Impressive command over the subject matter",1
+"Course was delivered exceptionally well",1
+"Student questions are welcomed and answered",1
+"Faculty creates a safe learning environment",1
+"Highly effective teaching methodology",1
+"Lab sessions were very productive",1
+"Faculty was thorough in every topic",1
+"My interest in the subject grew significantly",1
+"Teaching improved my overall understanding",1
+"Great job in making abstract ideas concrete",1
+"Professor explains with enthusiasm and clarity",1
+"Very positive and constructive classroom experience",1
+"I feel confident about this subject now",1
+"The professor brings fresh perspectives",1
+"Faculty demonstrated strong industry knowledge",1
+"This class genuinely improved my skills",1
+"Teaching is both rigorous and engaging",1
+"Professor always relates content to real problems",1
+"An outstanding academic experience",1
+"Well paced lectures with great depth",1
+"Faculty provides helpful study tips",1
+"Teaching approach is student centered",1
+"Professor made us think critically",1
+"Very friendly and accessible teacher",1
+"Best faculty for technical subjects",1
+"Course content delivered with great precision",1
+"Exceptional teaching quality overall",1
+"Each lecture was informative and enjoyable",1
+"The professors passion for teaching is evident",1
+"Teaching methodology was innovative",1
+"Faculty helped me understand complex algorithms",1
+"Classroom environment was always positive",1
+"Very good at simplifying hard topics",1
+"Teacher helped students achieve their potential",1
+"Excellent grading and feedback on assignments",1
+"The lectures were always engaging and fun",1
+"Faculty was consistent in teaching quality",1
+"Professor encouraged independent thinking",1
+"Clear explanations with visual aids",1
+"Inspired me to pursue further studies in this subject",1
+"Class discussions were very enriching",1
+"Faculty handled doubts with patience and detail",1
+"Highly satisfied with the course delivery",1
+"The professor delivered well researched content",1
+"Teaching is impactful and memorable",1
+"Really learned a lot this semester",1
+"Best course experience I have had",1
+"Faculty explains concepts with real case studies",1
+"Interactive teaching made concepts stick",1
+"Professor communicates complex ideas effortlessly",1
+"Excellent academic guidance and support",1
+"Faculty made exam preparation easy",1
+"Class notes were well organized and useful",1
+"Highly motivated by this faculty",1
+"Loved the teaching energy and passion",1
+"Faculty gave detailed solutions to all problems",1
+"The course changed my perspective on the subject",1
+"Best teacher for Data Structures",1
+"NLP course was explained very well",1
+"Smart Farming concepts were made practical",1
+"Excellent professional attitude and conduct",1
+"Superb knowledge transfer by the professor",1
+"A true educator who cares about students",1
+"The class atmosphere was great",1
+"Professor brings out the best in students",1
+"Faculty gave us assignments that helped us grow",1
+"Teaching quality exceeded my expectations",1
+"Very clear explanation of all topics covered",1
+"The professor made every student feel valued",1
+"Faculty was always encouraging and supportive",1
+"Best course I took this academic year",1
+"Great teacher with strong fundamentals",1
+"Very helpful during exam preparation",1
+"Faculty used innovative teaching methods",1
+"Learning was enjoyable and effective",1
+"Professor shared valuable resources and references",1
+"Excellent at breaking down complex ideas",1
+"Faculty communication was always clear and direct",1
+"Assignments were challenging but very educational",1
+"Best semester thanks to this amazing faculty",1
+"Teaching approach boosted my confidence",1
+"Professor clearly loves what they teach",1
+"Great feedback on all submitted work",1
+"Class notes were comprehensive and well organized",1
+"Faculty provided excellent exam guidance",1
+"The professors teaching is simply excellent",1
+"Very engaging and informative classes",1
+"I feel fully prepared for the exam",1
+"Professor explained every topic with examples",1
+"Wonderful academic experience this semester",1
+"Very poor teaching",0
+"Faculty does not explain clearly",0
+"Very boring lecture",0
+"Could not understand anything",0
+"Teacher is not interested in teaching",0
+"Very bad experience in class",0
+"Worst faculty I have ever encountered",0
+"No proper explanation given",0
+"Very slow and unclear teaching",0
+"Faculty comes unprepared to class",0
+"Does not answer student questions",0
+"Lectures are very difficult to follow",0
+"No proper notes provided",0
+"Faculty just reads from slides",0
+"Very unhelpful in clearing doubts",0
+"Worst teaching I have seen",0
+"Class is always boring",0
+"No real world examples given",0
+"Faculty is always late to class",0
+"Not approachable at all",0
+"Very poor communication skills",0
+"Could not follow the lecture",0
+"No interaction with students",0
+"Very monotone and dull delivery",0
+"Faculty skips important topics",0
+"Very poor course management",0
+"Lab sessions were not well organized",0
+"Assignments are unclear and confusing",0
+"No proper structure in teaching",0
+"Faculty does not care about students",0
+"Class was a waste of time",0
+"Could not understand a single topic",0
+"Very unenthusiastic teacher",0
+"Teacher has very poor knowledge",0
+"Does not follow the syllabus properly",0
+"Explains concepts incorrectly sometimes",0
+"Very inconsistent teaching quality",0
+"Faculty ignores student questions",0
+"Worst class experience ever",0
+"No feedback given on assignments",0
+"Teacher is very rude to students",0
+"Very condescending attitude",0
+"Not helpful during exam preparation",0
+"Faculty is never available for consultation",0
+"Lecture speed is too fast to understand",0
+"Notes are incomplete and poorly organized",0
+"Examples given are irrelevant",0
+"Very poor use of time in class",0
+"Faculty does not cover important topics",0
+"Teaching is very theoretical and impractical",0
+"Students feel ignored in class",0
+"Very low quality of explanation",0
+"Faculty frequently cancels classes",0
+"Concepts are explained in a confusing way",0
+"No motivation to attend this class",0
+"Faculty does not grade assignments fairly",0
+"Very poor interaction with students",0
+"I dread attending this class",0
+"Nothing was made clear in the entire semester",0
+"Class is completely disorganized",0
+"Faculty seems disinterested in teaching",0
+"Very poor understanding of student needs",0
+"I learned nothing from this course",0
+"Teaching style does not suit any student",0
+"Faculty barely covers the syllabus",0
+"Very disappointing course experience",0
+"Lectures are hard to sit through",0
+"Faculty does not adapt to student feedback",0
+"Terrible experience in this class",0
+"Professor has poor subject knowledge",0
+"No effort put into teaching preparation",0
+"Class discussions are unproductive",0
+"Faculty gives very poor quality notes",0
+"Teaching is below expected standards",0
+"Assignments are unreasonably difficult",0
+"Faculty does not explain after students ask",0
+"I struggled throughout the semester",0
+"Lectures lack depth and detail",0
+"Faculty shows favoritism in grading",0
+"Very unprofessional behavior in class",0
+"No syllabus coverage done on time",0
+"Very poor classroom management",0
+"Faculty confuses students more than helps",0
+"Teaching quality is very disappointing",0
+"Class feels like a waste of effort",0
+"Very unorganized and chaotic teaching",0
+"Professor rarely finishes topics on time",0
+"Explanations are often incomplete",0
+"Students leave class more confused",0
+"Faculty does not follow through on commitments",0
+"I do not recommend this faculty to anyone",0
+"Very poor support for struggling students",0
+"Teaching method is outdated and ineffective",0
+"No practical knowledge shared",0
+"Class was rarely interactive or engaging",0
+"Faculty attitude towards students is negative",0
+"No value added by attending these lectures",0
+"I had to rely on YouTube to learn this subject",0
+"Exams were not aligned with what was taught",0
+"Very unsatisfactory teaching overall",0
+"Faculty does not encourage student participation",0
+"Teaching was rushed and incomplete",0
+"Very poor faculty for technical subjects",0
+"Did not enjoy a single class this semester",0
+"Worst academic experience of my life",0
+"The class was okay",2
+"Teaching is average",2
+"Not bad but could be better",2
+"Sometimes clear sometimes confusing",2
+"Average teaching experience",2
+"Class was neither good nor bad",2
+"Teaching is decent but not great",2
+"Okay experience overall",2
+"Average performance by the faculty",2
+"Sometimes interesting sometimes boring",2
+"The lecture was fine",2
+"Teaching is satisfactory but not excellent",2
+"Could be improved but it is acceptable",2
+"Class is manageable",2
+"Average interaction with students",2
+"Some topics were well explained some were not",2
+"The course was okay",2
+"Teaching pace is acceptable",2
+"Neither impressed nor disappointed",2
+"Satisfactory but nothing memorable",2
+"Content was delivered adequately",2
+"Decent teaching style",2
+"Mixed experience throughout the semester",2
+"Some classes were good some were average",2
+"Acceptable quality of teaching",2
+"Faculty explains most things clearly",2
+"Generally okay but room for improvement",2
+"Teaching is standard nothing extraordinary",2
+"Moderate level of student engagement",2
+"Average class participation encouraged",2
+"Teaching was fine most of the time",2
+"Faculty was helpful sometimes",2
+"Course was average overall",2
+"Nothing outstanding about the teaching",2
+"Somewhat engaging but not always",2
+"Teaching was consistent but not inspiring",2
+"Average knowledge demonstrated by faculty",2
+"Fairly decent lectures",2
+"Mediocre teaching experience",2
+"Some good aspects some lacking areas",2
+"Class structure was basic but functional",2
+"Faculty was present but not very engaging",2
+"Teaching quality fluctuated throughout",2
+"Average use of teaching tools",2
+"Okay assignment structure",2
+"Teaching was passable for the subject",2
+"Some topics were great others were rushed",2
+"The faculty did their job but nothing more",2
+"Not terrible but not inspiring either",2
+"Average level of understanding achieved",2
+"Teaching could use more energy",2
+"Satisfactory but not engaging",2
+"Middle of the road teaching experience",2
+"Nothing remarkable about the class",2
+"Faculty seemed capable but not motivated",2
+"Adequate coverage of the syllabus",2
+"Some assignments were useful some were not",2
+"Teaching was okay on most days",2
+"Moderate clarity in explanation",2
+"Average depth of knowledge shown",2
+"Fair teaching overall",2
+"Not bad but not particularly good either",2
+"Class environment was neutral",2
+"Teaching lacked spark but was functional",2
+"Moderate level of student support provided",2
+"Some good lectures but also some poor ones",2
+"Teaching was acceptable for the course level",2
+"Okay overall but expected more",2
+"Faculty tried but delivery needs improvement",2
+"Average classroom experience",2
+"Lessons were informative but not engaging",2
+"Neither highly motivated nor highly bored",2
+"Decent but could be much better",2
+"Average difficulty of assignments",2
+"Teaching was functional but not exciting",2
+"Moderate interaction in the classroom",2
+"Sometimes doubts were cleared sometimes not",2
+"Teaching quality is somewhere in the middle",2
+"Not the best but also not the worst",2
+"Course was manageable with this teaching",2
+"Faculty is okay to work with",2
+"Nothing particularly impressive about the course",2
+"Satisfactory syllabus coverage",2
+"Moderate quality of lecture notes",2
+"Teaching worked but lacked enthusiasm",2
+"Average rapport between teacher and students",2
+"Faculty delivered content at an average pace",2
+"Overall okay experience for the semester",2
+"Decent teaching but needs more examples",2
+"Teaching was neutral throughout",2
+"Some students benefited some did not",2
+"Faculty performance was mediocre",2
+"Average feedback given on student work",2
+"Teaching is fine but not memorable",2
+"Okay use of classroom time",2
+"Average academic experience",2
+"Lectures are passable but uninspiring",2
+"Faculty met minimum expectations",2
+"Teaching quality was acceptable but not great",2
+"Moderate overall satisfaction with the course",2
+"Nothing stood out in either direction",2
+"Just an average teaching semester",2
+"Adequate but room for significant improvement",2
